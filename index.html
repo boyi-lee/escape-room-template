@@ -1,69 +1,82 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>托勒密占星四書｜互動學習星盤</title>
-<meta name="description" content="依據《Tetrabiblos》整理的繁體中文互動學習網站，透過四書導讀、原典摘要、知識卡與測驗理解古典占星架構。">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
-<style>
-:root{--navy:#071225;--navy2:#0d1f3c;--panel:#102848e8;--gold:#d7ad55;--gold2:#f4d98f;--ivory:#f6f0df;--muted:#aebbd0;--line:#cba85d44;--ok:#68c79a;--bad:#e18b8b}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 50% -10%,#173c6d 0,#0a1c36 36%,#050d1b 100%);color:var(--ivory);font-family:'Noto Sans TC',sans-serif;line-height:1.75;min-height:100vh}body:before{content:"";position:fixed;inset:0;pointer-events:none;background-image:radial-gradient(#fff 0.7px,transparent 0.8px);background-size:43px 43px;opacity:.16}.shell{width:min(1180px,calc(100% - 28px));margin:auto}.topbar{position:sticky;top:0;z-index:20;background:#071225db;backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}.topbar .shell{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 0}.brand{font-family:'Noto Serif TC';font-weight:900;letter-spacing:.12em;color:var(--gold2)}nav{display:flex;gap:8px;flex-wrap:wrap}nav button{border:1px solid var(--line);background:#ffffff09;color:var(--ivory);padding:7px 12px;border-radius:999px;cursor:pointer}.hero{padding:72px 0 42px;display:grid;grid-template-columns:1.2fr .8fr;gap:44px;align-items:center}.eyebrow{color:var(--gold);letter-spacing:.28em;font-size:.78rem}.hero h1{font-family:'Noto Serif TC';font-size:clamp(2.7rem,7vw,5.8rem);line-height:1.05;margin:.25em 0 .22em;background:linear-gradient(135deg,#fff6d8,#d7ad55);-webkit-background-clip:text;color:transparent}.hero p{color:#c5d1e3;max-width:680px}.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}.btn{border:1px solid var(--gold);border-radius:999px;padding:11px 18px;background:transparent;color:var(--gold2);cursor:pointer;font-weight:700}.btn.primary{background:linear-gradient(135deg,#b78939,#e6c976);color:#091326;border:0}.astrolabe{width:min(390px,80vw);aspect-ratio:1;margin:auto;border:1px solid #f4d98f66;border-radius:50%;position:relative;box-shadow:0 0 70px #cda94f22,inset 0 0 50px #cda94f18;animation:spin 60s linear infinite}.astrolabe:before,.astrolabe:after{content:"";position:absolute;border-radius:50%;inset:10%;border:1px solid #f4d98f55}.astrolabe:after{inset:25%;background:radial-gradient(circle,#e1c06c33,transparent 65%)}.zodiac{position:absolute;inset:0;display:grid;place-items:center;font-size:1.45rem;color:var(--gold2);transform:rotate(calc(var(--i)*30deg)) translateY(-43%) rotate(calc(var(--i)*-30deg))}.sunmark{position:absolute;inset:42%;display:grid;place-items:center;border-radius:50%;background:#d7ad55;color:#061225;box-shadow:0 0 35px #e8c469aa;font-size:1.5rem}@keyframes spin{to{transform:rotate(360deg)}}section{padding:34px 0}.section-title{font-family:'Noto Serif TC';font-size:clamp(1.7rem,4vw,2.6rem);margin:0 0 10px;color:var(--gold2)}.section-note{color:var(--muted);max-width:850px}.controls{display:flex;gap:12px;flex-wrap:wrap;margin:22px 0}.search{flex:1;min-width:240px;background:#07152a;border:1px solid var(--line);border-radius:14px;color:white;padding:12px 15px}.progress{padding:10px 14px;border:1px solid var(--line);border-radius:14px;color:var(--gold2)}.book-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.book-card{background:linear-gradient(160deg,#133058dd,#091a33ee);border:1px solid var(--line);border-radius:22px;padding:22px;cursor:pointer;transition:.25s;min-height:230px}.book-card:hover,.book-card.active{transform:translateY(-5px);border-color:#d7ad55aa;box-shadow:0 18px 45px #0006}.book-no{font-family:'Noto Serif TC';color:var(--gold);font-size:.85rem;letter-spacing:.18em}.book-card h3{font-family:'Noto Serif TC';font-size:1.5rem;margin:.45em 0}.book-card p{color:var(--muted);font-size:.92rem}.tag{display:inline-block;margin:4px 4px 0 0;padding:3px 8px;border-radius:999px;background:#d7ad5517;color:#ecd28e;font-size:.75rem}.reader{margin-top:22px;background:#08172ce8;border:1px solid var(--line);border-radius:24px;padding:clamp(20px,4vw,36px)}.reader-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start}.reader h3{font-family:'Noto Serif TC';font-size:2rem;margin:0;color:var(--gold2)}.chapter-list{display:flex;gap:8px;overflow:auto;padding:14px 0 18px}.chapter-list button{white-space:nowrap;border:1px solid var(--line);background:#ffffff08;color:#dce5f3;padding:8px 11px;border-radius:10px;cursor:pointer}.chapter-list button.active{background:#d7ad55;color:#071225}.lesson{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:#ffffff07;border:1px solid #ffffff12;border-radius:17px;padding:18px}.panel h4{margin:0 0 8px;color:#f1d58c;font-family:'Noto Serif TC'}.panel p,.panel li{color:#c5d1e3}.quote{border-left:3px solid var(--gold);padding-left:15px;color:#eee1bd;font-family:'Noto Serif TC'}.warning{margin-top:14px;padding:12px 15px;background:#d7ad5510;border:1px solid var(--line);border-radius:12px;color:#d8c9a3;font-size:.86rem}.quiz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.quiz-card{background:#0b1e39;border:1px solid var(--line);border-radius:18px;padding:18px}.quiz-card h4{margin-top:0}.answers{display:grid;gap:8px}.answers button{border:1px solid #ffffff1c;background:#ffffff08;color:#dce5f3;border-radius:11px;padding:10px;text-align:left;cursor:pointer}.answers button.correct{border-color:var(--ok);color:var(--ok)}.answers button.wrong{border-color:var(--bad);color:var(--bad)}.result{min-height:26px;font-size:.86rem;color:var(--muted);margin-top:8px}.footer{border-top:1px solid var(--line);margin-top:50px;padding:28px 0 45px;color:#91a1b8;font-size:.84rem}.hidden{display:none}@media(max-width:900px){.hero{grid-template-columns:1fr;text-align:center}.hero p{margin-inline:auto}.cta{justify-content:center}.book-grid{grid-template-columns:1fr 1fr}.lesson{grid-template-columns:1fr}.quiz-grid{grid-template-columns:1fr 1fr}}@media(max-width:620px){nav{display:none}.book-grid,.quiz-grid{grid-template-columns:1fr}.hero{padding-top:45px}.reader-head{display:block}.astrolabe{width:270px}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>托勒密占星四書｜互動學習星盤</title>
+  <meta name="description" content="依據《Tetrabiblos》整理的繁體中文互動學習網站，透過四書導讀、原典定位、知識卡與章節檢核理解古典占星架構。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-<header class="topbar"><div class="shell"><div class="brand">托勒密占星四書</div><nav><button data-go="books">四書導讀</button><button data-go="reader">章節學習</button><button data-go="quiz">星盤試煉</button></nav></div></header>
-<main class="shell">
-<section class="hero"><div><div class="eyebrow">TETRABIBLOS · CLAUDIUS PTOLEMY</div><h1>托勒密<br>占星四書</h1><p>從天體的自然性質、世運徵象，到本命結構與人生事件，循序拆解古典占星最具影響力的理論骨架。每一章先讀原典精神，再用白話知識卡理解，最後以測驗解鎖學習進度。</p><div class="cta"><button class="btn primary" data-go="books">展開四書</button><button class="btn" data-go="quiz">接受星盤試煉</button></div></div><div class="astrolabe" aria-label="旋轉古典星盤"><span class="sunmark">☉</span><span class="zodiac" style="--i:0">♈</span><span class="zodiac" style="--i:1">♉</span><span class="zodiac" style="--i:2">♊</span><span class="zodiac" style="--i:3">♋</span><span class="zodiac" style="--i:4">♌</span><span class="zodiac" style="--i:5">♍</span><span class="zodiac" style="--i:6">♎</span><span class="zodiac" style="--i:7">♏</span><span class="zodiac" style="--i:8">♐</span><span class="zodiac" style="--i:9">♑</span><span class="zodiac" style="--i:10">♒</span><span class="zodiac" style="--i:11">♓</span></div></section>
-<section id="books"><h2 class="section-title">四書學習地圖</h2><p class="section-note">四書不是四本互不相干的清單。第一書建立語法，第二書處理集體環境，第三書分析人的先天條件，第四書再追問人生領域與時間展開。</p><div class="controls"><input id="search" class="search" placeholder="搜尋：行星、蝕象、婚姻、壽命……"><div class="progress">已完成 <b id="progress">0</b> / 16 章</div></div><div id="bookGrid" class="book-grid"></div></section>
-<section id="reader"><h2 class="section-title">章節學習</h2><div id="readerBox" class="reader"></div></section>
-<section id="quiz"><h2 class="section-title">星盤試煉</h2><p class="section-note">每題答對即記錄一枚星印。這裡不是命運裁決所，只是檢查你是否真的讀懂，而不是被古典術語催眠。</p><div id="quizGrid" class="quiz-grid"></div><div class="cta"><button class="btn" id="reset">重置學習紀錄</button></div></section>
-</main>
-<footer class="footer"><div class="shell">本網站為古典占星史料的教育性整理。白話內容是依據 J. M. Ashmand 英譯《Tetrabiblos》所作的摘要與教學轉譯，不應視為科學、醫療、法律或人生決策的確定預測。</div></footer>
-<script>
-const BOOKS=[
-{n:'第一書',title:'占星的自然語法',desc:'建立行星、星座、相位與尊貴系統，回答「天體以何種性質作用」。',tags:['行星性質','吉凶','守護','三分性'],chapters:[
-{t:'可知與有用的界線',o:'托勒密先區分天體運行的精確計算，以及由自然性質推論世間變化的技藝；後者受物質條件與多重原因影響，不能要求絕對不誤。',w:'占星判斷是一種條件式推論，而非不可改變的神諭。個體差異、地區、教養與其他原因都必須一併考慮。',k:['天文位置與占星判斷是兩個層次','預測具有可能性，不等於必然性','預知的價值在準備與減輕影響']},
-{t:'七曜的基本性質',o:'太陽主要加熱並稍微乾燥；月亮主要增濕並略帶熱；土星偏冷與乾；火星偏熱與乾；木星溫暖而濕潤；金星濕潤並溫和加熱；水星因與其他星體的關係而容易改變。',w:'行星不是先貼上「好壞」標籤，而是先以熱、冷、乾、濕四種自然品質描述，再看它們如何混合、過量或取得平衡。',k:['太陽：熱、稍乾','月亮：濕、稍熱','土星：冷乾；火星：熱乾','木星：溫濕；金星：濕潤；水星：可變']},
-{t:'吉凶、陰陽與日夜',o:'木星與金星因溫濕、促進生長而稱吉星；土星與火星因極端冷乾或熱乾而稱凶星。行星又依性質、位置與日夜條件區分陰陽及宗派。',w:'「吉凶」描述的是作用傾向，不是道德人格。宗派讓行星在適合的日盤或夜盤環境中較能表現其性質。',k:['吉凶是自然作用的分類','太陽、木星、土星偏日間','月亮、金星、火星偏夜間','水星依晨昏狀態改變']},
-{t:'星座關係與尊貴',o:'托勒密以守護、三分性、擢升與界描述行星和黃道位置的親和；也討論合意相位、互見、相離、入相與離相。',w:'尊貴可理解為行星是否身處熟悉、能有效運作的環境。它不是單獨的分數遊戲，仍須與相位、位置和整體結構一起判讀。',k:['守護：行星的本質居所','擢升：被提升的特殊位置','三分性：依元素與日夜分配','界：星座度數內的細部分區']}]},
-{n:'第二書',title:'世界與集體事件',desc:'先看國家、地區與氣候，再討論日月蝕、彗星及年度天氣徵象。',tags:['世運','地理','日月蝕','天氣'],chapters:[
-{t:'一般原因先於個別原因',o:'托勒密把預測分為普遍與個別。國家、城市與集體事件由更廣泛、更有力的原因支配，因此判斷個人之前，應先理解其所處的大環境。',w:'宏觀環境會限制個體可能性。古典占星的順序是先世運、後本命，而不是把每件事都歸因於個人星盤。',k:['普遍事件涵蓋國家與城市','較大的原因能壓過較小原因','個體判斷應放入時代與地域背景']},
-{t:'地區與天象的親和',o:'第二書建立黃道三分性、行星、恆星與不同地區的對應，再觀察相關天空區域是否出現蝕象或重要行星現象。',w:'這是一套古代地理宇宙觀。可用來理解古典世運技法的結構，但其中對民族與地域的描述帶有時代限制，不應照單全收。',k:['先找地區與星座的傳統對應','再確認發生徵象的天空區域','歷史文化偏見需被標示']},
-{t:'蝕象的四步判斷',o:'日月蝕判斷依序處理：哪些地區受影響、事件何時開始及延續多久、哪一類人事物受影響、事件呈現何種性質。',w:'蝕象不是看到一次就宣布災難。它是一個由位置、時間、對象與性質組成的判斷流程。',k:['Where：受影響地區','When：開始與持續時間','Who：受影響類別','What：事件品質']},
-{t:'年度與天氣',o:'托勒密以年度新月、季節起點、月相、行星位置、星座各區段和大氣現象，推論冷暖、風雨與季節狀況。',w:'這部分反映古代天文、農業與氣象觀察交織的知識史。現代天氣仍應依氣象科學判斷。',k:['由年度與季節尺度逐步縮小','月相與行星共同提供徵象','大氣現象作為最後的觀察線索']}]},
-{n:'第三書',title:'本命與先天條件',desc:'從出生點、父母與手足，進入身體、壽命、性情和疾病等本命議題。',tags:['本命','上升點','身體','心智'],chapters:[
-{t:'出生時刻與上升度數',o:'本命判斷首先要求盡可能校正出生時刻與上升度數，因為宮位與重要點的誤差會改變後續推論。',w:'資料品質是占星判讀的地基。出生時間不精確時，應降低對宮位與時間技法的信心，而不是硬把模糊資料包裝成精密答案。',k:['先確認出生資料可靠度','上升點影響宮位結構','誤差應被公開標示']},
-{t:'本命題目的判讀順序',o:'第三書依序討論父母、手足、性別、雙生、未能養育的孩子、壽命、體貌、身體傷病、心智品質與心智疾病。',w:'托勒密以主題分章，但每一題都不是只看單一星體，而是尋找主題位置、主星、光體與相關見證的組合。',k:['先定位主題位置','再找主宰與見證星','綜合星體性質與狀態','避免單一象徵直接下結論']},
-{t:'身體、氣質與傷病',o:'體貌與氣質由上升、光體、行星性質及季節等因素綜合；傷病則考察地平兩角、相關宮位、凶星配置與星座身體部位對應。',w:'這是歷史性的醫療占星框架，不具現代診斷效力。網站保留其知識結構，但不提供健康預測。',k:['體貌：上升與行星性質的混合','傷病：角度、宮位、凶星與部位象徵','不可取代醫師診斷']},
-{t:'心智品質',o:'托勒密以月亮處理感受與感知層面，以水星處理理性與表達，再觀察它們所在星座、相位、主星及其他行星見證。',w:'心智不是由太陽星座一句話決定。古典方法重視月亮、水星及其完整配置，呈現的是多因素組合。',k:['月亮：感受、習性與感知','水星：理解、表達與推理','相位與主星改變表現方式']}]},
-{n:'第四書',title:'人生領域與時間',desc:'討論財富、地位、工作、婚姻、子女、人際、旅行、死亡與人生時序。',tags:['財富','職業','婚姻','時間'],chapters:[
-{t:'財富與地位',o:'財富以幸運點及其主星、相關見證為核心；地位則考察光體、角度及具權勢的行星配置。',w:'物質資源與社會地位是不同問題，不應用同一套指標混為一談。任何推論也必須放回現實條件與個人行動。',k:['財富與名望分開判讀','幸運點關聯物質資源','光體與角度關聯地位']},
-{t:'行動與職業',o:'職業判斷重視太陽附近及天頂附近具有力量的行星，尤其火星、金星與水星，再依其性質與相互組合推斷活動類型。',w:'這不是現代職業名稱配對表，而是從行星功能推論工作方式：技術、競爭、藝術、交易、書寫或管理等。',k:['先找有能力主導行動的行星','再把行星功能翻譯為工作型態','組合比單顆行星更重要']},
-{t:'婚姻、子女與人際',o:'婚姻依性別框架觀察月亮或太陽及其相位；子女考察天頂、第五／第十一相關位置及月亮、木星、金星等；朋友與敵人則看光體、上升與幸運點的關係。',w:'原典的性別、婚姻與階級觀念受古代社會限制。現代教學應保留技法來源，同時明確區分歷史描述與今日價值。',k:['關係判斷重視光體與相位','子女議題看多個生育象徵','古代性別假設不可直接套用']},
-{t:'旅行、死亡與時間分期',o:'旅行考察地平軸與相關行星；死亡章討論生命終結的類型；末章以主導星與時間分配追蹤人生不同階段。',w:'死亡預測涉及高度不確定與倫理風險，本網站不提供個人死亡推算。時間技法應用於理解階段性主題，而非製造恐懼。',k:['旅行與地平軸相關','時間分期用來追蹤主題何時被啟動','死亡技法僅作史料認識，不作個人預測']}]}
-];
-const QUIZ=[
-['托勒密如何看待占星預測的確定性？',['受多重條件影響，只能作可能性推論','所有事件皆不可改變','只要出生時間正確便不會出錯'],0,'第一書明確區分精確天文計算與較不確定的自然判斷。'],
-['哪一組最符合木星與金星被稱為吉星的理由？',['其溫濕性質較有利於生長與平衡','它們距離地球最近','它們永遠不形成困難相位'],0,'吉凶首先源於自然品質，而非道德評價。'],
-['第二書為何先討論國家與集體事件？',['較大的原因會支配較小、個別的原因','個人星盤完全沒有用途','古代人只關心戰爭'],0,'托勒密認為普遍原因的力量與範圍更大。'],
-['蝕象判斷不包含下列哪一項？',['只依星座名稱立即斷吉凶','受影響地區','事件時間與持續期'],0,'蝕象判斷需要位置、時間、對象與性質。'],
-['本命判讀前，第三書特別重視什麼？',['校正出生時刻與上升度數','先決定太陽星座人格','先選一顆最喜歡的行星'],0,'資料品質會直接影響宮位與重要點。'],
-['心智品質主要由哪兩個象徵共同分析？',['月亮與水星','火星與木星','太陽與土星'],0,'月亮偏感知與習性，水星偏理解與表達。'],
-['第四書中，財富與地位應如何處理？',['分成不同主題與指標分析','只看第二宮便足夠','都由太陽星座決定'],0,'托勒密將物質財富與尊榮地位分開。'],
-['職業判斷重視哪組行星功能？',['火星、金星、水星及其組合','只有月亮','只有土星'],0,'它們象徵行動、技藝、美感、交易與智識等工作功能。'],
-['網站如何處理原典中的醫療占星？',['保留歷史結構，但不作現代診斷','直接提供疾病預測','刪除所有相關章節'],0,'史料可學，但醫療判斷應交給現代專業。'],
-['尊貴系統最合適的理解是？',['行星與位置之間的親和及運作條件','行星的道德階級','固定不變的吉凶分數'],0,'守護、擢升、三分性與界描述不同層次的親和。'],
-['原典性別與階級描述應如何使用？',['標示時代限制，避免直接套用今日個案','視為永恆真理','完全忽略文本背景'],0,'歷史技法與現代價值需要清楚分層。'],
-['時間技法較健康的使用方式是？',['理解人生階段與主題的啟動','宣告所有事件必然發生','精確預測死亡日期'],0,'時間技法應支持準備與反思，而不是製造宿命恐懼。']
-];
-let currentBook=0,currentChapter=0;const done=new Set(JSON.parse(localStorage.getItem('tetraDone')||'[]'));
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-function renderBooks(filter=''){const g=$('#bookGrid');g.innerHTML='';BOOKS.forEach((b,i)=>{const text=(b.title+b.desc+b.tags.join('')+b.chapters.map(c=>c.t+c.w).join('')).toLowerCase();if(filter&&!text.includes(filter.toLowerCase()))return;const el=document.createElement('article');el.className='book-card'+(i===currentBook?' active':'');el.innerHTML=`<div class="book-no">${b.n}</div><h3>${b.title}</h3><p>${b.desc}</p>${b.tags.map(t=>`<span class="tag">${t}</span>`).join('')}`;el.onclick=()=>{currentBook=i;currentChapter=0;renderBooks($('#search').value);renderReader();$('#reader').scrollIntoView()};g.appendChild(el)});$('#progress').textContent=done.size}
-function renderReader(){const b=BOOKS[currentBook],c=b.chapters[currentChapter],key=`${currentBook}-${currentChapter}`;$('#readerBox').innerHTML=`<div class="reader-head"><div><div class="book-no">${b.n}</div><h3>${b.title}</h3></div><button class="btn" id="complete">${done.has(key)?'✓ 已完成':'標記完成'}</button></div><div class="chapter-list">${b.chapters.map((x,i)=>`<button class="${i===currentChapter?'active':''}" data-c="${i}">${i+1}. ${x.t}</button>`).join('')}</div><div class="lesson"><div class="panel"><h4>原典摘要</h4><p class="quote">${c.o}</p></div><div class="panel"><h4>白話理解</h4><p>${c.w}</p></div><div class="panel"><h4>關鍵規則</h4><ul>${c.k.map(x=>`<li>${x}</li>`).join('')}</ul></div><div class="panel"><h4>學習提醒</h4><p>把規則放回完整結構、歷史背景與現實條件中。單一象徵不能代替整體判斷。</p><div class="warning">此頁是教學轉譯，不是逐字翻譯，也不提供個人命盤、健康或死亡預測。</div></div></div>`;$$('[data-c]').forEach(x=>x.onclick=()=>{currentChapter=+x.dataset.c;renderReader()});$('#complete').onclick=()=>{done.has(key)?done.delete(key):done.add(key);localStorage.setItem('tetraDone',JSON.stringify([...done]));renderReader();renderBooks($('#search').value)}}
-function renderQuiz(){const q=$('#quizGrid');q.innerHTML='';QUIZ.forEach((item,i)=>{const card=document.createElement('article');card.className='quiz-card';const opts=item[1].map((v,j)=>({v,j})).sort(()=>Math.random()-.5);card.innerHTML=`<h4>${i+1}. ${item[0]}</h4><div class="answers">${opts.map(o=>`<button data-j="${o.j}">${o.v}</button>`).join('')}</div><div class="result"></div>`;card.querySelectorAll('button').forEach(btn=>btn.onclick=()=>{if(card.dataset.lock)return;card.dataset.lock=1;const ok=+btn.dataset.j===item[2];btn.classList.add(ok?'correct':'wrong');if(!ok)card.querySelector(`[data-j="${item[2]}"]`).classList.add('correct');card.querySelector('.result').textContent=(ok?'答對。':'答案已標示。')+' '+item[3]});q.appendChild(card)})}
-$$('[data-go]').forEach(b=>b.onclick=()=>$('#'+b.dataset.go).scrollIntoView());$('#search').addEventListener('input',e=>renderBooks(e.target.value));$('#reset').onclick=()=>{localStorage.removeItem('tetraDone');done.clear();renderBooks();renderReader();renderQuiz()};renderBooks();renderReader();renderQuiz();
-</script>
+  <header class="topbar">
+    <div class="shell">
+      <div class="brand">托勒密占星四書</div>
+      <nav aria-label="主要導覽">
+        <button type="button" data-go="books">四書導讀</button>
+        <button type="button" data-go="reader">章節學習</button>
+        <button type="button" data-go="progressSection">學習進度</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">TETRABIBLOS · CLAUDIUS PTOLEMY</div>
+        <h1>托勒密<br>占星四書</h1>
+        <p>從天體的自然性質、世運徵象，到本命結構與人生事件，循序拆解古典占星的理論骨架。每章先讀原典定位與白話知識卡，再通過章節檢核，解鎖下一章。</p>
+        <div class="cta">
+          <button class="btn primary" type="button" data-go="books">展開四書</button>
+          <button class="btn" type="button" data-go="reader">繼續學習</button>
+        </div>
+      </div>
+      <div class="astrolabe" aria-label="旋轉古典星盤">
+        <span class="sunmark">☉</span>
+        <span class="zodiac" style="--i:0">♈</span><span class="zodiac" style="--i:1">♉</span>
+        <span class="zodiac" style="--i:2">♊</span><span class="zodiac" style="--i:3">♋</span>
+        <span class="zodiac" style="--i:4">♌</span><span class="zodiac" style="--i:5">♍</span>
+        <span class="zodiac" style="--i:6">♎</span><span class="zodiac" style="--i:7">♏</span>
+        <span class="zodiac" style="--i:8">♐</span><span class="zodiac" style="--i:9">♑</span>
+        <span class="zodiac" style="--i:10">♒</span><span class="zodiac" style="--i:11">♓</span>
+      </div>
+    </section>
+
+    <section id="books">
+      <h2 class="section-title">四書學習地圖</h2>
+      <p class="section-note">第一書建立語法，第二書處理集體環境，第三書分析本命條件，第四書再追問人生領域與時間展開。</p>
+      <div class="controls">
+        <input id="search" class="search" type="search" placeholder="搜尋章節：行星、蝕象、婚姻、壽命……" aria-label="搜尋四書章節">
+        <div class="progress">已通過 <b id="progress">0</b> / 16 章</div>
+      </div>
+      <div id="searchResults" class="search-results hidden" aria-live="polite"></div>
+      <div id="bookGrid" class="book-grid"></div>
+    </section>
+
+    <section id="reader">
+      <h2 class="section-title">章節學習</h2>
+      <p class="section-note">每章標示原典 Book 與 Chapter，方便回查附件版本。答對檢核後，才會真正解鎖下一章。</p>
+      <div id="readerBox" class="reader"></div>
+    </section>
+
+    <section id="progressSection">
+      <h2 class="section-title">學習進度</h2>
+      <div class="quiz-summary">
+        <div class="stat"><span>已通過章節</span><b id="passedCount">0</b></div>
+        <div class="stat"><span>已解鎖章節</span><b id="unlockedCount">1</b></div>
+        <div class="stat"><span>核心完成率</span><b id="completionRate">0%</b></div>
+      </div>
+      <div class="cta"><button class="btn" id="reset" type="button">重置學習紀錄</button></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="shell">本網站為古典占星史料的教育性整理。白話內容依據 J. M. Ashmand 英譯《Tetrabiblos》作摘要與教學轉譯，不應視為科學、醫療、法律或人生決策的確定預測。</div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
 </body>
 </html>
