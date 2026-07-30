@@ -3,80 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>托勒密占星四書｜互動學習星盤</title>
-  <meta name="description" content="依據《Tetrabiblos》整理的繁體中文互動學習網站，透過四書導讀、原典定位、知識卡與章節檢核理解古典占星架構。">
+  <title>安納陪你讀《托勒密占星四書》</title>
+  <meta name="description" content="以故事導讀、康乃爾筆記與中英文原典對照，循序理解《托勒密占星四書》。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@600;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-  <header class="topbar">
-    <div class="shell">
-      <div class="brand">托勒密占星四書</div>
-      <nav aria-label="主要導覽">
-        <button type="button" data-go="books">四書導讀</button>
-        <button type="button" data-go="reader">章節學習</button>
-        <button type="button" data-go="progressSection">學習進度</button>
-      </nav>
-    </div>
-  </header>
-
-  <main class="shell">
-    <section class="hero">
-      <div>
-        <div class="eyebrow">TETRABIBLOS · CLAUDIUS PTOLEMY</div>
-        <h1>托勒密<br>占星四書</h1>
-        <p>從天體的自然性質、世運徵象，到本命結構與人生事件，循序拆解古典占星的理論骨架。每章先讀原典定位與白話知識卡，再通過章節檢核，解鎖下一章。</p>
-        <div class="cta">
-          <button class="btn primary" type="button" data-go="books">展開四書</button>
-          <button class="btn" type="button" data-go="reader">繼續學習</button>
-        </div>
-      </div>
-      <div class="astrolabe" aria-label="旋轉古典星盤">
-        <span class="sunmark">☉</span>
-        <span class="zodiac" style="--i:0">♈</span><span class="zodiac" style="--i:1">♉</span>
-        <span class="zodiac" style="--i:2">♊</span><span class="zodiac" style="--i:3">♋</span>
-        <span class="zodiac" style="--i:4">♌</span><span class="zodiac" style="--i:5">♍</span>
-        <span class="zodiac" style="--i:6">♎</span><span class="zodiac" style="--i:7">♏</span>
-        <span class="zodiac" style="--i:8">♐</span><span class="zodiac" style="--i:9">♑</span>
-        <span class="zodiac" style="--i:10">♒</span><span class="zodiac" style="--i:11">♓</span>
-      </div>
-    </section>
-
-    <section id="books">
-      <h2 class="section-title">四書學習地圖</h2>
-      <p class="section-note">第一書建立語法，第二書處理集體環境，第三書分析本命條件，第四書再追問人生領域與時間展開。</p>
-      <div class="controls">
-        <input id="search" class="search" type="search" placeholder="搜尋章節：行星、蝕象、婚姻、壽命……" aria-label="搜尋四書章節">
-        <div class="progress">已通過 <b id="progress">0</b> / 16 章</div>
-      </div>
-      <div id="searchResults" class="search-results hidden" aria-live="polite"></div>
-      <div id="bookGrid" class="book-grid"></div>
-    </section>
-
-    <section id="reader">
-      <h2 class="section-title">章節學習</h2>
-      <p class="section-note">每章標示原典 Book 與 Chapter，方便回查附件版本。答對檢核後，才會真正解鎖下一章。</p>
-      <div id="readerBox" class="reader"></div>
-    </section>
-
-    <section id="progressSection">
-      <h2 class="section-title">學習進度</h2>
-      <div class="quiz-summary">
-        <div class="stat"><span>已通過章節</span><b id="passedCount">0</b></div>
-        <div class="stat"><span>已解鎖章節</span><b id="unlockedCount">1</b></div>
-        <div class="stat"><span>核心完成率</span><b id="completionRate">0%</b></div>
-      </div>
-      <div class="cta"><button class="btn" id="reset" type="button">重置學習紀錄</button></div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="shell">本網站為古典占星史料的教育性整理。白話內容依據 J. M. Ashmand 英譯《Tetrabiblos》作摘要與教學轉譯，不應視為科學、醫療、法律或人生決策的確定預測。</div>
-  </footer>
-
-  <script src="assets/js/data.js"></script>
-  <script src="assets/js/app.js"></script>
-</body>
-</html>
+<header class="topbar"><div class="shell"><div class="brand">安納 × 托勒密占星四書</div><nav><button data-go="path">選擇程度</button><button data-go="chapters">第一書樣板</button><button data-go="reader">康乃爾導讀</button></nav></div></header>
+<main class="shell">
+<section class="hero">
+  <div><div class="eyebrow">TETRABIBLOS · VERIFIED LEARNING EDITION</div><h1>不是背結論，<br>而是看懂托勒密怎麼想</h1><p>安納會用故事、生活比喻和案例陪你讀，再把原典整理成康乃爾筆記。每一個核心知識點都附上英文原文、台灣繁體中文翻譯、逐句解釋與來源位置。</p><div class="cta"><button class="btn primary" data-go="path">先選我的程度</button><button class="btn" data-go="chapters">直接看四章樣板</button></div></div>
+  <div class="anna-card"><div class="anna-mark">安</div><h2>我是安納</h2><p>看不懂，不代表你不適合學。古典文本本來就把很多前提藏在句子裡。我們先把問題拆開，再慢慢把它拼回去。</p></div>
+</section>
+<section id="path"><h2 class="section-title">你想從哪裡開始？</h2><p class="section-note">程度只調整預設展開的內容，不限制章節。成年人不需要被網站鎖在第一課門口接受訓話。</p><div id="levelGrid" class="level-grid"></div></section>
+<section id="chapters"><h2 class="section-title">第一書四章樣板</h2><p class="section-note">本輪先驗證故事化教學、康乃爾架構、來源對照與語言品質。四章通過後，再擴充完整四書。</p><div class="controls"><input id="search" class="search" type="search" placeholder="搜尋：可能性、七曜、吉凶、尊貴……"><span class="progress">已讀 <b id="readCount">0</b> / 4</span></div><div id="chapterGrid" class="chapter-grid"></div></section>
+<section id="reader"><div id="readerBox" class="reader"></div></section>
+</main>
+<footer class="footer"><div class="shell">教育性歷史文本導讀。原典、翻譯、安納導讀、教學比喻與現代編輯註解均分層標示；不作科學、醫療或確定性人生預測。</div></footer>
+<script src="assets/js/data.js"></script><script src="assets/js/app.js"></script>
+</body></html>
