@@ -1,0 +1,62 @@
+# Tests
+
+## Test 1 - Open a chapter and enter the learning loop [sanity]
+Viewport: mobile
+Covers: app load, learning-route navigation, read stage, visible loop progress
+Description: Verifies that opening a chapter from the mobile learning route starts the Read step.
+
+Steps:
+1. Navigate to the app
+2. Tap "航線" in the bottom navigation
+3. Tap the first learning-route card
+
+Expected: The first chapter reader is visible and its route shows 讀 as completed while 想 is not yet completed.
+
+## Test 2 - Complete recall and receive explanatory quiz feedback
+Viewport: desktop
+Covers: recall confirmation, quiz navigation, explanatory feedback
+Description: Verifies the learner can move from Recall to Apply and receive reasoning rather than a score-only response.
+
+Steps:
+1. Open the first chapter
+2. Click "我能用自己的話說明"
+3. Open "小小任務"
+4. Answer the first question
+
+Expected: The route marks 想 as completed and a visible explanation appears below the selected question.
+
+## Test 3 - Advanced mode requires source verification
+Viewport: desktop
+Covers: level-specific quality gate, source verification, completion guardrail
+Description: Verifies that Source Reader mode cannot complete a chapter without reviewing the source layer.
+
+Steps:
+1. Select "原典研讀者"
+2. Open the first chapter and complete recall
+3. Open "小小任務" and answer all questions correctly
+4. Observe the completion control before source verification
+
+Expected: "完成本輪並安排複習" remains disabled until "我已核對原文、翻譯與說明" is completed.
+
+## Test 4 - Mobile bottom navigation supports one-hand access
+Viewport: mobile
+Covers: responsive layout, fixed bottom navigation, chapter access
+Description: Verifies the mobile learning path remains reachable without relying on the desktop header.
+
+Steps:
+1. Navigate to the app on mobile
+2. Tap "章節" in the bottom navigation
+3. Tap the second chapter card
+
+Expected: The page scrolls to chapters and opens the selected chapter reader without horizontal overflow.
+
+## Test 5 - Search shows a useful empty state
+Viewport: mobile
+Covers: chapter search, empty-state guardrail
+Description: Verifies that an unmatched search does not leave a blank or broken chapter area.
+
+Steps:
+1. Navigate to the app
+2. Enter "不存在的章節" in the search field
+
+Expected: A visible message from 安納 suggests using a shorter keyword and no error is shown.
