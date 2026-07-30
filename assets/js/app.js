@@ -2,71 +2,69 @@
 "use strict";
 const data=window.TETRABIBLOS_V2;
 const levelData=window.TETRABIBLOS_LEVELS;
-const storageKey="tetrabiblosAnnaStorybookV4";
-const state={level:"beginner",current:0,read:new Set(),tab:"storybook"};
+const storageKey="tetrabiblosAnnaLoopV5";
+const DAY=86400000;
+const state={level:"beginner",current:0,tab:"storybook",progress:{}};
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[m]));
-function load(){try{const p=JSON.parse(localStorage.getItem(storageKey)||"{}");if(levelData.profiles[p.level])state.level=p.level;if(Array.isArray(p.read))state.read=new Set(p.read)}catch(e){console.warn("學習紀錄無法讀取，已使用安全預設值。",e)}}
-function save(){try{localStorage.setItem(storageKey,JSON.stringify({level:state.level,read:[...state.read]}))}catch(e){console.warn("學習紀錄暫時無法儲存。",e)}}
+const emptyProgress=()=>({opened:false,sourceChecked:false,correct:[],attempts:0,stage:0,nextReviewAt:null,lastStudiedAt:null});
+function chapterProgress(id){if(!state.progress[id])state.progress[id]=emptyProgress();return state.progress[id]}
+function load(){try{const p=JSON.parse(localStorage.getItem(storageKey)||"{}");if(levelData.profiles[p.level])state.level=p.level;if(p.progress&&typeof p.progress==="object")state.progress=p.progress}catch(e){console.warn("學習紀錄無法讀取，已使用安全預設值。",e)}}
+function save(){try{localStorage.setItem(storageKey,JSON.stringify({level:state.level,progress:state.progress}))}catch(e){console.warn("學習紀錄暫時無法儲存。",e)}}
 function profile(){return levelData.profiles[state.level]}
 function lens(c){return levelData.chapterLenses[c.id]?.[state.level]}
+function requiredScore(){return state.level==="beginner"?2:3}
+function loopStatus(c){
+  const p=chapterProgress(c.id),now=Date.now();
+  if(p.stage>=4&&p.nextReviewAt&&now>=p.nextReviewAt)return {key:"review",label:"該回來複習了",icon:"↻",action:"進行複習"};
+  if(p.stage>=4)return {key:"complete",label:"本輪已完成",icon:"✦",action:"查看筆記"};
+  if(p.stage===3)return {key:"apply",label:"已應用，待封存",icon:"🗝️",action:"完成本輪"};
+  if(p.stage===2)return {key:"recall",label:"已回想，待應用",icon:"🧭",action:"進入任務"};
+  if(p.stage===1)return {key:"read",label:"已閱讀，待回想",icon:"☾",action:"開始回想"};
+  return {key:"new",label:"尚未開始",icon:"○",action:"翻開本章"};
+}
 function renderLevels(){
   const box=$("#levelGrid");
   box.innerHTML=Object.entries(levelData.profiles).map(([id,p])=>`<button class="level-card ${id===state.level?"active":""}" data-level="${id}" aria-pressed="${id===state.level}"><span class="level-icon">${p.icon}</span><div><div class="source-label">${id.toUpperCase()}</div><h3>${p.label}</h3><p>${p.subtitle}</p><small>${p.promise}</small></div></button>`).join("");
-  $$('[data-level]').forEach(b=>b.onclick=()=>{state.level=b.dataset.level;state.tab=profile().defaults[0];save();renderLevels();renderReader()});
+  $$('[data-level]').forEach(b=>b.onclick=()=>{state.level=b.dataset.level;state.tab=profile().defaults[0];save();renderAll()});
   const p=profile();
-  $("#levelExplain").innerHTML=`<span class="level-icon">${p.icon}</span><div><strong>目前閱讀方式：${p.label}</strong><p>${p.promise}</p><div class="mode-spec"><span>提示：${p.cueLabel}</span><span>任務：${p.taskLabel}</span><span>原典：${p.sourceMode}</span></div></div>`;
+  $("#levelExplain").innerHTML=`<span class="level-icon">${p.icon}</span><div><strong>目前閱讀方式：${p.label}</strong><p>${p.promise}</p><div class="mode-spec"><span>提示：${p.cueLabel}</span><span>任務：${p.taskLabel}</span><span>原典：${p.sourceMode}</span><span>通關：${requiredScore()} / 3 題</span></div></div>`;
+}
+function renderLoop(){
+  const finished=data.chapters.filter(c=>chapterProgress(c.id).stage>=4).length;
+  const due=data.chapters.filter(c=>{const p=chapterProgress(c.id);return p.nextReviewAt&&Date.now()>=p.nextReviewAt}).length;
+  $("#loopSummary").innerHTML=`<article><span>✦</span><div><small>本輪完成</small><strong>${finished} / ${data.chapters.length}</strong></div></article><article><span>↻</span><div><small>待複習</small><strong>${due}</strong></div></article><article><span>${profile().icon}</span><div><small>目前模式</small><strong>${profile().label}</strong></div></article>`;
+  $("#loopMap").innerHTML=data.chapters.map((c,i)=>{const s=loopStatus(c),p=chapterProgress(c.id);return `<button class="loop-card ${s.key}" data-loop-chapter="${i}"><div class="planet-orbit"><span>${s.icon}</span></div><div><small>${c.no}</small><h3>${c.title}</h3><p>${s.label}</p><div class="mini-route"><i class="${p.stage>=1?"done":""}">讀</i><i class="${p.stage>=2?"done":""}">想</i><i class="${p.stage>=3?"done":""}">用</i><i class="${p.stage>=4?"done":""}">複</i></div><b>${s.action} →</b></div></button>`}).join("");
+  $$('[data-loop-chapter]').forEach(b=>b.onclick=()=>openChapter(Number(b.dataset.loopChapter),loopStatus(data.chapters[Number(b.dataset.loopChapter)]).key==="review"?"quiz":"storybook"));
 }
 function renderChapters(filter=""){
  const q=filter.trim().toLowerCase(),box=$("#chapterGrid");
- box.innerHTML=data.chapters.map((c,i)=>({c,i})).filter(x=>`${x.c.title} ${x.c.summary} ${x.c.cues.join(" ")}`.toLowerCase().includes(q)).map(({c,i})=>`<button class="chapter-card ${i===state.current?"active":""}" data-chapter="${i}"><span class="chapter-number">${i+1}</span><div class="source-label">${c.no} · ${c.reading}</div><h3>${c.title}</h3><p>${c.summary}</p><span class="status">${state.read.has(c.id)?"🔖 已加入書籤":"翻開本章 →"}</span></button>`).join("")||'<div class="anna-note">安納沒有找到相符內容。試著使用較短的關鍵字。</div>';
- $$('[data-chapter]').forEach(b=>b.onclick=()=>{state.current=Number(b.dataset.chapter);state.tab=profile().defaults[0];renderChapters($("#search").value);renderReader();$("#reader").scrollIntoView({behavior:"smooth"})});
- $("#readCount").textContent=state.read.size;
+ box.innerHTML=data.chapters.map((c,i)=>({c,i})).filter(x=>`${x.c.title} ${x.c.summary} ${x.c.cues.join(" ")}`.toLowerCase().includes(q)).map(({c,i})=>{const s=loopStatus(c);return `<button class="chapter-card ${i===state.current?"active":""}" data-chapter="${i}"><span class="chapter-number">${i+1}</span><div class="source-label">${c.no} · ${c.reading}</div><h3>${c.title}</h3><p>${c.summary}</p><span class="status ${s.key}">${s.icon} ${s.label}</span></button>`}).join("")||'<div class="anna-note">安納沒有找到相符內容。試著使用較短的關鍵字。</div>';
+ $$('[data-chapter]').forEach(b=>b.onclick=()=>openChapter(Number(b.dataset.chapter),profile().defaults[0]));
+ $("#readCount").textContent=data.chapters.filter(c=>chapterProgress(c.id).stage>=4).length;
 }
-function visualCards(c){
- const l=lens(c);if(!l)return"";
- return `<section class="visual-map"><div class="visual-title"><span>${l.icon}</span><div><small>${profile().taskLabel}</small><h3>${l.title}</h3></div></div><div class="visual-grid">${l.cards.map(x=>`<article class="visual-card"><span class="visual-icon">${x[0]}</span><div><h4>${x[1]}</h4><p>${x[2]}</p></div></article>`).join("")}</div></section>`;
+function openChapter(index,tab){state.current=index;state.tab=tab;const c=data.chapters[index],p=chapterProgress(c.id);p.opened=true;p.stage=Math.max(p.stage,1);p.lastStudiedAt=Date.now();save();renderAll(false);$("#reader").scrollIntoView({behavior:"smooth"})}
+function illustration(c){
+ const palette={b1c1:["#f0c66b","#8fb2cf"],b1c2:["#e37b54","#7ba98d"],b1c3:["#d4ad53","#82618a"],b1c4:["#b88655","#8ca38c"]}[c.id]||["#f0c66b","#8fb2cf"];
+ return `<svg class="chapter-illustration" viewBox="0 0 520 260" role="img" aria-label="${esc(c.title)}的星光寓言插圖"><defs><linearGradient id="sky-${c.id}" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#202c53"/><stop offset="1" stop-color="#6b526b"/></linearGradient><filter id="wash-${c.id}"><feTurbulence baseFrequency=".018" numOctaves="2" seed="4"/><feDisplacementMap in="SourceGraphic" scale="2"/></filter></defs><rect width="520" height="260" rx="28" fill="url(#sky-${c.id})"/><circle cx="410" cy="62" r="34" fill="${palette[0]}" opacity=".9"/><circle cx="410" cy="62" r="48" fill="none" stroke="${palette[0]}" opacity=".28"/><path d="M0 208 Q90 168 172 205 T340 196 T520 210 V260 H0Z" fill="#e8d6ad" opacity=".92" filter="url(#wash-${c.id})"/><circle cx="128" cy="154" r="28" fill="${palette[1]}"/><path d="M128 182 v38 M108 220 h40 M116 192 q12 12 24 0" fill="none" stroke="#3b3042" stroke-width="6" stroke-linecap="round"/><path d="M68 78 q60 -28 118 0" fill="none" stroke="#f6e9b4" stroke-width="2" stroke-dasharray="3 9" opacity=".8"/><g fill="#fff2bd">${[[55,44],[88,92],[204,48],[248,82],[332,34],[466,118]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="2.2"/>`).join("")}</g><path d="M252 170 q38 -56 76 0 q-38 30 -76 0Z" fill="${palette[0]}" opacity=".75"/><text x="260" y="190" fill="#3b3042" font-size="18" font-family="serif">${c.no}</text></svg>`;
 }
-function guideHtml(c){
- const icons=["🧭","🪶","🌿","🔭"];
- return c.guide.map((x,i)=>`<section class="lesson-scene"><span class="scene-icon">${icons[i%icons.length]}</span><div><h4>${x.h}</h4><p>${x.p}</p></div></section>`).join("");
-}
-function storyHtml(c){
- const beginner=state.level==="beginner",advanced=state.level==="advanced";
- return `<div class="book-spread">
- <aside class="margin-notes"><div class="ribbon">${profile().cueLabel}</div><ul>${c.cues.map((x,i)=>`<li><span>${["✦","☾","✎","⌕","◇"][i%5]}</span>${x}</li>`).join("")}</ul><div class="tip">複習時先遮住正文，只看左側問題，試著把概念說回來。</div></aside>
- <article class="story-page">
-   ${advanced?`<details class="story-collapsed"><summary>展開安納的故事入口</summary><p>${c.story}</p></details>`:`<section class="opening-scene"><div class="moon-window"><span>☾</span><i>✦</i><b>✧</b></div><div><span class="kicker">安納說故事</span><p>${c.story}</p></div></section>`}
-   <div class="anna-whisper"><span class="mini-anna">安</span><p><strong>安納陪你讀</strong>${c.anna}</p></div>
-   ${visualCards(c)}
-   ${beginner?`<section class="memory-stars"><h3>先記住三顆星</h3>${c.quick.map((x,i)=>`<article><span>${["★","✦","✧"][i]}</span><p>${x}</p></article>`).join("")}</section>`:""}
-   <section class="knowledge-chapter"><div class="chapter-divider"><span>❦</span><h3>完整知識筆記</h3><span>❦</span></div>${guideHtml(c)}</section>
-   <section class="case-card"><span class="case-icon">🔭</span><div><h3>${c.case.title}</h3><p>${c.case.body}</p></div></section>
-   <section class="misconception-section"><h3>碎裂的水晶球：常見誤解</h3>${c.misconceptions.map(x=>`<div class="misconception"><span>⚠</span><p>${x}</p></div>`).join("")}</section>
-   <section class="treasure-box"><span class="treasure-icon">✦</span><div><h3>章末寶箱</h3><p>${c.summary}</p><ol>${c.takeaways.map(x=>`<li>${x}</li>`).join("")}</ol></div></section>
- </article></div>`;
-}
-function sourceHtml(c){
- const status=c.source.status==="verified";
- return `<section class="source-room"><header class="source-cover"><span class="scroll-icon">📜</span><div><small>資料來源與驗證</small><h3>${c.source.work}</h3><p>${c.source.book} · ${c.source.chapters} · ${c.source.pages}</p></div><span class="${status?"verified":"review"}">${status?"✓ 已驗證":"△ 待第二輪覆核"}</span></header>
- <div class="source-meta"><div><span>版本</span><strong>${c.source.edition}</strong></div><div><span>來源 ID</span><strong>${c.source.sourceId}</strong></div></div>
- <div class="mirror-intro"><span>🪞</span><p><strong>原典魔法鏡</strong>每張卡只處理一句英文、一句中文和一個翻譯決策。核心不是把兩塊文字並排，而是讓你看見證據如何支持教學。</p></div>
- <div class="sentence-stack">${c.excerpts.map((x,i)=>`<article class="sentence-card"><div class="sentence-no">${String(i+1).padStart(2,"0")}</div><div class="sentence-content"><div class="english-line"><span>ENGLISH</span><p>${esc(x.en)}</p></div><div class="translation-arrow">↓</div><div class="chinese-line"><span>繁體中文</span><p>${esc(x.zh)}</p></div><div class="anna-translation"><span>✎ 安納的翻譯說明</span><p>${esc(x.note)}</p></div></div></article>`).join("")}</div>
- <div class="evidence-legend"><span><i class="dot original"></i>英文原典</span><span><i class="dot translation"></i>本站翻譯</span><span><i class="dot guide"></i>教學說明</span></div></section>`;
-}
-function quizHtml(c){
- const levelLabels={beginner:"辨認概念與明顯誤解",modern:"比較古今語言與條件判斷",advanced:"檢查證據、譯法與推論邊界"};
- return `<section class="quest-board"><header><span>🗝️</span><div><small>${profile().taskLabel}</small><h3>安納的小小任務</h3><p>${levelLabels[state.level]}。不鎖章節，也不拿分數假裝理解。</p></div></header>${c.quiz.map((q,qi)=>`<article class="quest"><div class="quest-number">${qi+1}</div><div><strong>${q.q}</strong>${q.options.map((o,oi)=>`<button data-q="${qi}" data-a="${oi}">${o}</button>`).join("")}<div class="quiz-feedback" id="feedback-${qi}"></div></div></article>`).join("")}</section>`;
-}
-function renderReader(){
- const c=data.chapters[state.current],p=profile();
- const tabs=[["storybook","安納說故事"],["source","原典魔法鏡"],["quiz","小小任務"]];
- let body=state.tab==="source"?sourceHtml(c):state.tab==="quiz"?quizHtml(c):storyHtml(c);
- $("#readerBox").innerHTML=`<header class="reader-head"><div><div class="source-label">${c.source.book} · ${c.source.chapters}</div><h2>${c.no}｜${c.title}</h2><p>${p.icon} ${p.label} · ${c.reading}</p></div><button class="bookmark ${state.read.has(c.id)?"saved":""}" id="markRead">${state.read.has(c.id)?"🔖 已加入書籤":"♡ 加入書籤"}</button></header><div class="tabs" role="tablist">${tabs.map(t=>`<button class="tab ${state.tab===t[0]?"active":""}" data-tab="${t[0]}">${t[1]}</button>`).join("")}</div>${body}`;
- $("#markRead").onclick=()=>{state.read.has(c.id)?state.read.delete(c.id):state.read.add(c.id);save();renderChapters($("#search").value);renderReader()};
+function visualCards(c){const l=lens(c);if(!l)return"";return `<section class="visual-map"><div class="visual-title"><span>${l.icon}</span><div><small>${profile().taskLabel}</small><h3>${l.title}</h3></div></div><div class="visual-grid">${l.cards.map(x=>`<article class="visual-card"><span class="visual-icon">${x[0]}</span><div><h4>${x[1]}</h4><p>${x[2]}</p></div></article>`).join("")}</div></section>`}
+function guideHtml(c){const icons=["🧭","🪶","🌿","🔭"];return c.guide.map((x,i)=>`<details class="lesson-scene" ${i===0?"open":""}><summary><span class="scene-icon">${icons[i%icons.length]}</span><strong>${x.h}</strong></summary><p>${x.p}</p></details>`).join("")}
+function recallPanel(c){const p=chapterProgress(c.id);return `<section class="recall-panel"><div><small>LOOP ② 主動回想</small><h3>先不要往下滑，你能說回來嗎？</h3><p>${c.cues[0]||"本章最重要的問題是什麼？"}</p></div><button id="recallDone" class="loop-action ${p.stage>=2?"done":""}">${p.stage>=2?"✓ 已完成回想":"我能用自己的話說明"}</button></section>`}
+function storyHtml(c){const beginner=state.level==="beginner",advanced=state.level==="advanced";return `<div class="book-spread"><aside class="margin-notes"><div class="ribbon">${profile().cueLabel}</div><ul>${c.cues.map((x,i)=>`<li><span>${["✦","☾","✎","⌕","◇"][i%5]}</span>${x}</li>`).join("")}</ul><div class="tip">複習時遮住正文，只看問題，試著把概念說回來。</div></aside><article class="story-page">${illustration(c)}${advanced?`<details class="story-collapsed"><summary>展開安納的故事入口</summary><p>${c.story}</p></details>`:`<section class="opening-scene"><div><span class="kicker">安納說故事</span><p>${c.story}</p></div></section>`}<div class="anna-whisper"><span class="mini-anna">安</span><p><strong>安納陪你讀</strong>${c.anna}</p></div>${visualCards(c)}${beginner?`<section class="memory-stars"><h3>先記住三顆星</h3>${c.quick.map((x,i)=>`<article><span>${["★","✦","✧"][i]}</span><p>${x}</p></article>`).join("")}</section>`:""}<section class="knowledge-chapter"><div class="chapter-divider"><span>❦</span><h3>完整知識筆記</h3><span>❦</span></div>${guideHtml(c)}</section><section class="case-card"><span class="case-icon">🔭</span><div><h3>${c.case.title}</h3><p>${c.case.body}</p></div></section><section class="misconception-section"><h3>碎裂的水晶球：常見誤解</h3>${c.misconceptions.map(x=>`<div class="misconception"><span>⚠</span><p>${x}</p></div>`).join("")}</section><section class="treasure-box"><span class="treasure-icon">✦</span><div><h3>章末寶箱</h3><p>${c.summary}</p><ol>${c.takeaways.map(x=>`<li>${x}</li>`).join("")}</ol></div></section>${recallPanel(c)}</article></div>`}
+function keywordMarkup(text){return esc(text).replace(/\b(positive|infallible|heating|moistening|drying|cooling|benefic|malefic|domicile|exaltation)\b/gi,'<mark>$1</mark>')}
+function sourceHtml(c){const status=c.source.status==="verified",p=chapterProgress(c.id);return `<section class="source-room"><header class="source-cover"><span class="scroll-icon">📜</span><div><small>資料來源與驗證</small><h3>${c.source.work}</h3><p>${c.source.book} · ${c.source.chapters} · ${c.source.pages}</p></div><span class="${status?"verified":"review"}">${status?"✓ 已驗證":"△ 待第二輪覆核"}</span></header><div class="source-meta"><div><span>版本</span><strong>${c.source.edition}</strong></div><div><span>來源 ID</span><strong>${c.source.sourceId}</strong></div></div><div class="mirror-intro"><span>🪞</span><p><strong>原典魔法鏡</strong>每張卡只處理一句英文、一句中文和一個翻譯決策。標記詞可幫你看見翻譯風險，而不是把兩塊文字粗暴並排。</p></div><div class="sentence-stack">${c.excerpts.map((x,i)=>`<article class="sentence-card"><div class="sentence-no">${String(i+1).padStart(2,"0")}</div><div class="sentence-content"><div class="english-line"><span>ENGLISH</span><p>${keywordMarkup(x.en)}</p></div><div class="translation-arrow">↓</div><div class="chinese-line"><span>繁體中文</span><p>${esc(x.zh)}</p></div><div class="anna-translation"><span>✎ 安納的翻譯說明</span><p>${esc(x.note)}</p></div></div></article>`).join("")}</div><button id="sourceChecked" class="source-check ${p.sourceChecked?"done":""}">${p.sourceChecked?"✓ 已完成來源核對":"我已核對原文、翻譯與說明"}</button><div class="evidence-legend"><span><i class="dot original"></i>英文原典</span><span><i class="dot translation"></i>本站翻譯</span><span><i class="dot guide"></i>教學說明</span></div></section>`}
+function quizHtml(c){const p=chapterProgress(c.id),levelLabels={beginner:"辨認概念與明顯誤解",modern:"比較古今語言與條件判斷",advanced:"檢查證據、譯法與推論邊界"};const passed=p.correct.length>=requiredScore()&&(state.level!=="advanced"||p.sourceChecked);return `<section class="quest-board"><header><span>🗝️</span><div><small>LOOP ③ ${profile().taskLabel}</small><h3>安納的小小任務</h3><p>${levelLabels[state.level]}。目前完成 ${p.correct.length} / 3，通關需要 ${requiredScore()} 題${state.level==="advanced"?"並完成來源核對":""}。</p></div></header>${c.quiz.map((q,qi)=>`<article class="quest"><div class="quest-number">${qi+1}</div><div><strong>${q.q}</strong>${q.options.map((o,oi)=>`<button data-q="${qi}" data-a="${oi}" ${p.correct.includes(qi)?"disabled":""}>${o}</button>`).join("")}<div class="quiz-feedback" id="feedback-${qi}">${p.correct.includes(qi)?`<span>✦ 已答對</span>${q.explain}`:""}</div></div></article>`).join("")}<section class="loop-seal ${passed?"ready":""}"><div><small>LOOP ④ 封存與複習</small><h3>${passed?"本章已具備完成條件":"完成條件尚未達成"}</h3><p>${passed?"封存後會安排下一次複習，避免知識只停留在今天。":"先完成足夠題目；原典研讀者還需核對來源。"}</p></div><button id="sealLoop" ${passed?"":"disabled"}>${p.stage>=4?"重新安排複習":"完成本輪並安排複習"}</button></section></section>`}
+function renderReader(){const c=data.chapters[state.current],p=profile(),cp=chapterProgress(c.id);const tabs=[["storybook","安納說故事"],["source","原典魔法鏡"],["quiz","小小任務"]];const body=state.tab==="source"?sourceHtml(c):state.tab==="quiz"?quizHtml(c):storyHtml(c);const s=loopStatus(c);$("#readerBox").innerHTML=`<header class="reader-head"><div><div class="source-label">${c.source.book} · ${c.source.chapters}</div><h2>${c.no}｜${c.title}</h2><p>${p.icon} ${p.label} · ${c.reading}</p><div class="reader-loop"><span>${s.icon}</span><strong>${s.label}</strong><div class="mini-route"><i class="${cp.stage>=1?"done":""}">讀</i><i class="${cp.stage>=2?"done":""}">想</i><i class="${cp.stage>=3?"done":""}">用</i><i class="${cp.stage>=4?"done":""}">複</i></div></div></div><button class="bookmark" id="jumpNext">${s.action}</button></header><div class="tabs" role="tablist">${tabs.map(t=>`<button class="tab ${state.tab===t[0]?"active":""}" data-tab="${t[0]}">${t[1]}</button>`).join("")}</div>${body}`;
+ $("#jumpNext").onclick=()=>{if(cp.stage<2){state.tab="storybook";renderReader();setTimeout(()=>$("#recallDone")?.scrollIntoView({behavior:"smooth"}),50)}else if(cp.stage<4||s.key==="review"){state.tab="quiz";renderReader()}else{state.tab="storybook";renderReader()}};
  $$('[data-tab]').forEach(b=>b.onclick=()=>{state.tab=b.dataset.tab;renderReader()});
- $$('[data-q]').forEach(b=>b.onclick=()=>{const qi=Number(b.dataset.q),ai=Number(b.dataset.a),q=c.quiz[qi];$$(`[data-q="${qi}"]`).forEach(x=>{x.disabled=true;if(Number(x.dataset.a)===q.answer)x.classList.add("correct")});if(ai!==q.answer)b.classList.add("wrong");$(`#feedback-${qi}`).innerHTML=`<span>${ai===q.answer?"✦ 答對了":"☾ 再看一次概念"}</span>${q.explain}`});
+ $("#recallDone")?.addEventListener("click",()=>{cp.stage=Math.max(cp.stage,2);cp.lastStudiedAt=Date.now();save();renderAll(false)});
+ $("#sourceChecked")?.addEventListener("click",()=>{cp.sourceChecked=true;cp.lastStudiedAt=Date.now();save();renderAll(false)});
+ $$('[data-q]').forEach(b=>b.onclick=()=>{const qi=Number(b.dataset.q),ai=Number(b.dataset.a),q=c.quiz[qi];cp.attempts+=1;$$(`[data-q="${qi}"]`).forEach(x=>{x.disabled=true;if(Number(x.dataset.a)===q.answer)x.classList.add("correct")});if(ai!==q.answer)b.classList.add("wrong");else if(!cp.correct.includes(qi))cp.correct.push(qi);if(cp.correct.length>=requiredScore())cp.stage=Math.max(cp.stage,3);cp.lastStudiedAt=Date.now();save();$(`#feedback-${qi}`).innerHTML=`<span>${ai===q.answer?"✦ 答對了":"☾ 再看一次概念"}</span>${q.explain}<button class="return-note" data-tab="storybook">回到相關筆記</button>`;renderLoop();renderChapters($("#search").value)});
+ $("#sealLoop")?.addEventListener("click",()=>{cp.stage=4;cp.correct=[];cp.nextReviewAt=Date.now()+DAY*(cp.nextReviewAt?3:1);cp.lastStudiedAt=Date.now();save();renderAll(false)});
+ $$('[data-tab="storybook"].return-note').forEach(b=>b.onclick=()=>{state.tab="storybook";renderReader()});
 }
 function bind(){$$('[data-go]').forEach(b=>b.onclick=()=>$("#"+b.dataset.go).scrollIntoView({behavior:"smooth"}));$("#search").oninput=e=>renderChapters(e.target.value)}
-load();bind();renderLevels();renderChapters();renderReader();
+function renderAll(rebind=true){renderLevels();renderLoop();renderChapters($("#search")?.value||"");renderReader();if(rebind)bind()}
+load();renderAll();
 })();
