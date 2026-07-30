@@ -13,6 +13,20 @@ function loadChapter() {
   return context.window.TETRABIBLOS_V2.chapters.find(chapter => chapter.id === "b1c1");
 }
 
+test("deployment-compatible assets define learning levels without a new external script", () => {
+  const root = path.join(__dirname, "..");
+  const index = fs.readFileSync(path.join(root, "index.html"), "utf8");
+  const context = { window: {} };
+  const dataPath = path.join(root, "assets", "js", "data.js");
+  vm.runInNewContext(fs.readFileSync(dataPath, "utf8"), context, { filename: dataPath });
+
+  assert.ok(context.window.TETRABIBLOS_LEVELS, "data.js must define TETRABIBLOS_LEVELS");
+  assert.deepEqual(Object.keys(context.window.TETRABIBLOS_LEVELS.profiles).sort(), ["advanced", "beginner", "modern"]);
+  assert.ok(context.window.TETRABIBLOS_LEVELS.chapterLenses.b1c1);
+  assert.doesNotMatch(index, /<script\s+src=["']assets\/js\/learning-levels\.js["']><\/script>/);
+  assert.ok(index.indexOf('src="assets/js/data.js"') < index.indexOf('src="assets/js/app.js"'), "data.js must load before app.js");
+});
+
 test("B1C1 exposes only the verified Chapter 1 source boundary", () => {
   const chapter = loadChapter();
   assert.equal(chapter.source.book, "Book I");

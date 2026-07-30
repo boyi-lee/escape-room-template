@@ -49,7 +49,7 @@ test("B1C1 keeps each level's check set independent", () => {
 });
 
 test("level-specific checks use correctFor in quiz rendering, answering, pass gate, and sealing", () => {
-  assert.match(app, /function chapterProgress\(id\)\{if\(!state\.progress\[id\]\)/);
+  assert.match(app, /function chapterProgress\(id\)\{const key=`\$\{state\.level\}:\$\{id\}`/);
   const quiz = functionBody("quizHtml", "renderReader");
   const reader = functionBody("renderReader", "bind");
   const answer = reader.slice(reader.indexOf("$$('[data-q]')"), reader.indexOf('$("#sealLoop")'));
