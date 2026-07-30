@@ -4,24 +4,76 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>安納的星光書房｜托勒密占星四書</title>
-  <meta name="description" content="以童話故事書、分程度導讀、康乃爾筆記與逐句中英文原典對照，理解《托勒密占星四書》。">
+  <meta name="description" content="以童話故事書、分程度導讀、康乃爾筆記、逐句中英文原典對照與學習 Loop，理解《托勒密占星四書》。">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Klee+One:wght@400;600&family=Noto+Serif+TC:wght@500;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 <body>
-<header class="topbar"><div class="shell"><div class="brand"><span>✦</span> 安納的星光書房</div><nav aria-label="主要導覽"><button data-go="path">選擇閱讀方式</button><button data-go="chapters">第一書</button><button data-go="reader">打開故事書</button></nav></div></header>
+<header class="topbar">
+  <div class="shell">
+    <div class="brand"><span>✦</span> 安納的星光書房</div>
+    <nav aria-label="主要導覽">
+      <button data-go="path">閱讀方式</button>
+      <button data-go="loop">學習航線</button>
+      <button data-go="chapters">第一書</button>
+      <button data-go="reader">故事書</button>
+    </nav>
+  </div>
+</header>
+
 <main class="shell">
-<section class="hero">
-  <div class="hero-copy"><div class="eyebrow">TETRABIBLOS · VERIFIED STORYBOOK EDITION</div><h1>翻開星光書頁，<br>看懂托勒密怎麼想</h1><p>安納不替你背答案。她會先說一個故事，再帶你拆開概念、讀原文、核對翻譯。每一則教學都能回到原典位置，不讓漂亮故事偷偷取代證據。</p><div class="cta"><button class="btn primary" data-go="path">選擇我的閱讀方式</button><button class="btn" data-go="chapters">翻到第一書</button></div>
-  <div class="promise-row"><span>☾ 故事導讀</span><span>✎ 康乃爾筆記</span><span>⌕ 原典驗證</span></div></div>
-  <aside class="anna-card" aria-label="安納導讀角色"><div class="portrait"><span class="halo">✦</span><span class="anna-mark">安</span><span class="book-icon">⌁</span></div><p class="speech">「古典文本不是一堵牆。只是有人忘了替你留一扇門。」</p><h2>我是安納</h2><p>我會用細心、溫暖又不失準確的方式陪你閱讀。遇到複雜的地方，我們先慢一點；遇到沒有驗證的地方，我會直接說不知道。</p></aside>
-</section>
-<section id="path" class="storybook-section"><div class="section-heading"><span class="chapter-ornament">✧</span><div><h2 class="section-title">選擇你的閱讀方式</h2><p class="section-note">三種模式共用同一套原典與核心知識，差別在教學支架、比較視角、原典密度與檢核任務。不是換三個標題就假裝個人化。</p></div></div><div id="levelGrid" class="level-grid"></div><div id="levelExplain" class="level-explain" aria-live="polite"></div></section>
-<section id="chapters" class="storybook-section"><div class="section-heading"><span class="chapter-ornament">☼</span><div><h2 class="section-title">第一書四章樣板</h2><p class="section-note">自由選章，不強制鎖定。每章都包含故事、視覺筆記、逐句中英對照、來源驗證與程度化閱讀路徑。</p></div></div><div class="controls"><input id="search" class="search" type="search" placeholder="搜尋：可能性、七曜、吉凶、尊貴……" aria-label="搜尋章節"><span class="progress">書籤 <b id="readCount">0</b> / 4</span></div><div id="chapterGrid" class="chapter-grid"></div></section>
-<section id="reader"><div id="readerBox" class="reader"></div></section>
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">TETRABIBLOS · VERIFIED STORYBOOK EDITION</div>
+      <h1>沿著星光航線，<br>真正把托勒密讀懂</h1>
+      <p>安納會先用故事與圖像建立概念，再帶你回想、應用、核對原文。不是看完就算，而是讓每一章走完「閱讀 → 回想 → 應用 → 複習」的完整學習 Loop。</p>
+      <div class="cta">
+        <button class="btn primary" data-go="path">選擇我的閱讀方式</button>
+        <button class="btn" data-go="loop">查看星光航線</button>
+      </div>
+      <div class="promise-row"><span>☾ 故事導讀</span><span>✎ 康乃爾筆記</span><span>⌕ 原典驗證</span><span>↻ 間隔複習</span></div>
+    </div>
+    <aside class="anna-card" aria-label="安納導讀角色">
+      <div class="portrait" aria-hidden="true"><span class="halo">✦</span><span class="anna-mark">安</span><span class="book-icon">⌁</span></div>
+      <p class="speech">「讀懂，不是把一句話看過；而是過幾天，你還能把它說回來。」</p>
+      <h2>我是安納</h2>
+      <p>我會陪你拆解艱澀文字，也會在來源不足時直接標示。溫柔不是降低標準，而是讓你有餘裕把標準真正做到。</p>
+    </aside>
+  </section>
+
+  <section id="path" class="storybook-section">
+    <div class="section-heading"><span class="chapter-ornament">✧</span><div><h2 class="section-title">選擇你的閱讀方式</h2><p class="section-note">三種模式共用同一套原典與核心知識，差別在教學支架、比較視角、原典密度、通關條件與回饋方式。</p></div></div>
+    <div id="levelGrid" class="level-grid"></div>
+    <div id="levelExplain" class="level-explain" aria-live="polite"></div>
+  </section>
+
+  <section id="loop" class="storybook-section">
+    <div class="section-heading"><span class="chapter-ornament">↻</span><div><h2 class="section-title">星光學習航線</h2><p class="section-note">每章依序走過四個節點：閱讀、回想、應用、複習。進度反映真實學習行為，不再只算你有沒有點開頁面。</p></div></div>
+    <div id="loopSummary" class="loop-summary"></div>
+    <div id="loopMap" class="loop-map"></div>
+  </section>
+
+  <section id="chapters" class="storybook-section">
+    <div class="section-heading"><span class="chapter-ornament">☼</span><div><h2 class="section-title">第一書四章樣板</h2><p class="section-note">自由選章，不強制鎖定。每章都包含故事、圖像筆記、逐句中英對照、來源驗證與 Loop 任務。</p></div></div>
+    <div class="controls"><input id="search" class="search" type="search" placeholder="搜尋：可能性、七曜、吉凶、尊貴……" aria-label="搜尋章節"><span class="progress">已完成 <b id="readCount">0</b> / 4</span></div>
+    <div id="chapterGrid" class="chapter-grid"></div>
+  </section>
+
+  <section id="reader"><div id="readerBox" class="reader"></div></section>
 </main>
+
+<nav class="mobile-nav" aria-label="手機快速導覽">
+  <button data-go="path"><span>✧</span>程度</button>
+  <button data-go="loop"><span>↻</span>航線</button>
+  <button data-go="chapters"><span>☼</span>章節</button>
+  <button data-go="reader"><span>⌁</span>閱讀</button>
+</nav>
+
 <footer class="footer"><div class="shell">教育性歷史文本導讀。原典、翻譯、安納導讀、故事比喻與現代編輯註解均分層標示；不作科學、醫療或確定性人生預測。</div></footer>
-<script src="assets/js/data.js"></script><script src="assets/js/learning-levels.js"></script><script src="assets/js/app.js"></script>
-</body></html>
+<script src="assets/js/data.js"></script>
+<script src="assets/js/learning-levels.js"></script>
+<script src="assets/js/app.js"></script>
+</body>
+</html>
