@@ -50,7 +50,7 @@ window.TETRABIBLOS_V2 = {
         advanced:[
           {q:"哪一組「主張 → 證據」配對正確？",options:["兩種前置研究 → TET-B1-C01-S2-154-A","無誤規則 → TET-B1-C01-S2-155-A","批評者修辭 → TET-B1-C01-S2-156-A"],answer:0,explain:"p.154 的 record 直接摘錄兩種前置研究。",sourceIds:["TET-B1-C01-S2-154-A"]},
           {q:"將 infallible 譯為「人格毫無缺點」為何不當？",options:["它在句中限制的是規則的認識論確定性","它其實指第 155 頁的批評者","原文完全沒有此詞"],answer:0,explain:"source record 明確標記 infallible 是認識論限制。〔S2 p.156〕",sourceIds:["TET-B1-C01-S2-156-A"]},
-          {q:"下列哪項不應作為 Chapter 1 網站證據保留？",options:["未列入三筆已驗證 record 的論證","兩種前置研究的區分","受作用事物可變所帶來的規則限制"],answer:0,explain:"本垂直切片只允許 Chapter 1、source 2 PDF pp.154–156 的已驗證材料。",sourceIds:["TET-B1-C01-S2-154-A","TET-B1-C01-S2-156-A"],excludedEvidence:true}
+          {q:"下列哪項不應作為 Chapter 1 網站證據保留？",options:["後續章節的補救或預防論證","兩種前置研究的區分","受作用事物可變所帶來的規則限制"],answer:0,explain:"本垂直切片只允許 Chapter 1、source 2 PDF pp.154–156 的已驗證材料；第一個選項明確標示為排除項，而非本章證據。",sourceIds:["TET-B1-C01-S2-154-A","TET-B1-C01-S2-156-A"],excludedEvidence:true}
         ]
       }
     },

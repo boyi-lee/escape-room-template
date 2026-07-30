@@ -17,6 +17,13 @@ function functionBody(name, nextName) {
   return app.slice(start, end);
 }
 
+function correctForAt(level) {
+  const source = functionBody("correctFor", "loopStatus");
+  const context = { state: { level } };
+  vm.runInNewContext(`${source}; result = correctFor`, context);
+  return context.result;
+}
+
 function b1c1() {
   const context = { window: {} };
   const dataPath = path.join(__dirname, "..", "assets", "js", "data.js");
@@ -42,13 +49,21 @@ test("B1C1 keeps each level's check set independent", () => {
 });
 
 test("level-specific checks use correctFor in quiz rendering, answering, pass gate, and sealing", () => {
+  assert.match(app, /function chapterProgress\(id\)\{if\(!state\.progress\[id\]\)/);
   const quiz = functionBody("quizHtml", "renderReader");
   const reader = functionBody("renderReader", "bind");
   const answer = reader.slice(reader.indexOf("$$('[data-q]')"), reader.indexOf('$("#sealLoop")'));
   const seal = reader.slice(reader.indexOf('$("#sealLoop")'));
 
-  assert.match(app, /function correctFor\(c,p\)\{if\(!c\.checks\)return p\.correct;/);
-  assert.match(app, /correctByLevel/);
+  const correctFor = correctForAt("modern");
+  const legacyProgress = { correct: [0] };
+  const levelProgress = { correct: [0], correctByLevel: {} };
+  const legacyCorrect = correctFor({}, legacyProgress);
+  const levelCorrect = correctFor({ checks: { modern: [] } }, levelProgress);
+
+  assert.strictEqual(legacyCorrect, legacyProgress.correct);
+  assert.strictEqual(levelCorrect, levelProgress.correctByLevel.modern);
+  assert.equal(levelCorrect.length, 0);
   assert.match(quiz, /correct\s*=\s*correctFor\(c,p\)/);
   assert.match(quiz, /const passed\s*=\s*correct\.length\s*>=\s*requiredScore\(\)/);
   assert.doesNotMatch(quiz, /p\.correct/);
@@ -67,7 +82,7 @@ test("feedback returns to Cornell using the button destination", () => {
   const returnListener = reader.slice(reader.indexOf("return-note"));
 
   assert.match(answer, /class="return-note"\s+data-tab="cornell"/);
-  assert.match(returnListener, /\$\$\((?:'|")(?:\.return-note|\[data-tab\]\.return-note)(?:'|")\)/);
+  assert.match(returnListener, /\$\$\((?:'|")\.return-note(?:'|")\)/);
   assert.match(returnListener, /state\.tab\s*=\s*b\.dataset\.tab/);
   assert.match(reader, /\["cornell","康乃爾筆記"\]/);
   assert.match(reader, /state\.tab==="cornell"\?cornellHtml\(c\)/);
